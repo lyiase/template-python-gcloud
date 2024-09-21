@@ -6,5 +6,7 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 sudo apt-get -y update
 sudo apt-get -y install google-cloud-sdk
 
-# python package install
-pip3 install --user -r requirements.txt
+# poetry package install
+pip install poetry
+poetry config virtualenvs.in-project true
+poetry install
