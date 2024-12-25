@@ -36,10 +36,6 @@ RUN python -m compileall src
 
 RUN useradd -r python
 
-# model download
-COPY preload-model.py /app/preload-model.py
-RUN python3 preload-model.py
-
 # set run user permission
 RUN chown -R python:python .
 COPY --chown=python . .
