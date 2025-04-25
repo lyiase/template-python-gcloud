@@ -8,17 +8,7 @@
                 "GitHub.copilot-chat",
                 "ms-python.python",
                 "ms-python.black-formatter"
-            ],
-            "settings": {
-                "editor.defaultFormatter": "esbenp.prettier-vscode",
-                "python.defaultInterpreterPath": ".venv/bin/python",
-                "[python]": {
-                    "editor.defaultFormatter": "ms-python.black-formatter"
-                },
-                "editor.bracketPairColorization.enabled": true,
-                "editor.guides.bracketPairs": true,
-                "editor.formatOnSave": true
-            }
+            ]
         }
     },
     "postCreateCommand": "/bin/sh .devcontainer/postCreateCommand.sh"
