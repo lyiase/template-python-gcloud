@@ -1,19 +1,12 @@
 # variable
-ARG PYTHON_VERSION=3.13
+ARG PYTHON_VERSION=3.14
 
-# library build stage
-FROM python:${PYTHON_VERSION} AS requirements-stage
-#FROM huggingface/transformers-pytorch-cpu:latest AS requirements-stage
+FROM ghcr.io/astral-sh/uv:0.12.5 AS uv
 
-WORKDIR /tmp
-
-RUN pip install poetry && pip install poetry-plugin-export
-COPY ./pyproject.toml ./poetry.lock* /tmp/
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-# app packaging stage
 FROM python:${PYTHON_VERSION}
-#FROM huggingface/transformers-pytorch-cpu:latest
+COPY --from=uv /uv /uvx /bin/
+
+WORKDIR /app
 
 # set locale
 ENV LC_ALL=C.UTF-8
@@ -25,20 +18,20 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # set env : python workdirs
 ENV PYTHONPATH=/app
+ENV PATH="/app/.venv/bin:$PATH"
 #ENV HF_HOME=/app/.tf
 
 # install python libraries
-COPY . /app
-WORKDIR /app
-COPY --from=requirements-stage /tmp/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-install-project
+COPY . .
+RUN uv sync --locked
 RUN python -m compileall src
 
 RUN useradd -r python
 
 # set run user permission
 RUN chown -R python:python .
-COPY --chown=python . .
 
 USER python
 

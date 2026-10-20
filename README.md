@@ -7,12 +7,15 @@ python repository template.
 ### Dependencies
 
 ```bash
-# poetry install
-pip install poetry
+# install uv
+pip install uv
 
-# dependencies
-poetry add <package>
+# install dependencies
+uv sync
 
-# create requirements.txt
-poetry export -f requirements.txt --output requirements.txt
+# add a dependency
+uv add <package>
+
+# update dependencies
+uv lock --upgrade
 ```
